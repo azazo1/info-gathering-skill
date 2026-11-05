@@ -66,8 +66,9 @@ description: 通用网络调研与信息收集技能. 当用户要求调研, 收
 
 ### 4. 多源检索与抓取
 
-- 找入口用 web_search, 抓正文用 web_fetch, 动态页面用 browser
-- 结构化数据优先走 API 或专用 CLI, 见 `references/channels.md`
+- user 说 br / browser 时, 浏览器是主通道: 关键页面用 browser 打开确认, 不只用 curl
+- 其余情况: web_search 找入口, web_fetch 抓正文, 结构化数据走 API 或 CLI
+- 遇到 403, 429, 验证码, 登录墙或 JS 空壳页, 立刻切换 browser, 同一站连续两次 curl 失败就升级, 不要用 curl 硬扛
 - 每条材料记录 URL, 标题, 抓取时间, 发布者
 - 抓取失败的来源记入 `plan.md`, 不要静默丢弃
 - 遵守目标站点的 robots 与使用条款

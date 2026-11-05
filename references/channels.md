@@ -107,16 +107,39 @@ MCP 服务 (会话接入 MCP 时可用):
 | r.jina.ai | `https://r.jina.ai/<url>` | 200 |
 | Reddit | `https://www.reddit.com/search.json?q=...` | 403, 需 browser |
 
-## 7. 降级顺序
+## 7. 降级与升级规则
 
-- web_fetch 失败: r.jina.ai, 再 curl, 再 browser
-- 搜索被限流或反爬: 换引擎, 用 SearXNG, 加代理, 或改用站点内搜索与 RSS
-- 结构化 API 429: 加延时, 退避重试, 换同类服务 (Semantic Scholar 换 OpenAlex 或 Crossref)
-- Reddit 等 403: browser, 或读镜像与第三方摘录
+抓取结果先判断状态, 再决定通道, 不要在一个通道上反复重试:
+
+| 现象 | 判定 | 动作 |
+|---|---|---|
+| 200 且正文完整 | 正常 | 直接存档 |
+| 200 但正文为空壳, 只有导航与脚本 | JS 渲染 | 立刻换 browser, 或先试 r.jina.ai |
+| 403 / 429 / 验证码 / Cloudflare 挑战 | 反爬拦截 | 立刻换 browser, 不要连续 curl 重试 |
+| 302 跳转到登录页 | 需登录 | browser 中登录后取页 |
+| TLS 握手失败 | 证书或代理 | 换 python3, 或加代理 localhost:7890 |
+| 结构化 API 429 | 限流 | 加延时退避, 换同类 API |
+| 搜索结果被反爬或区域污染 | 搜索通道受限 | browser 搜索, 或换引擎 / SearXNG / 代理 |
+| 404 | 路径失效 | 查 Wayback, 或换入口 |
+
+关键原则:
+
+- 反爬, 验证码, 登录墙是 browser 通道的明确触发条件, 不是最后一招. 同一站连续两次 curl 失败就升级到 browser
+- 浏览器使用需要 user 授权 (kw: br / browser), 使用前先检查 browser 工具是否可用
 - 视频无字幕: 音频加转写, 或退化为文字摘要加时间点
-- 都不通: 记录在 plan.md, 在报告 "未覆盖" 里写清
+- 所有通道都不通: 记录在 plan.md, 在报告 "未覆盖" 里写清
 
-## 8. 合规与礼貌
+## 8. 浏览器通道
+
+user 说 br / browser, 表示允许并要求在抓取任务中使用浏览器. 这时浏览器是主通道, 不是兜底:
+
+- 关键页面用 browser 打开确认, 不只依赖 curl 返回的文本
+- 搜索结果页, 动态渲染页, 登录页, 需要点击展开的页面, 优先用 browser
+- 结构化 API 与静态文档仍可直接用 curl 或 web_fetch
+- 前置检查: 先确认浏览器扩展已连上. 未连上时把配置步骤告诉 user 并等待, 不要反复重试
+- 使用后把关键内容与 URL 存进 sources, 不要只凭记忆写结论
+
+## 9. 合规与礼貌
 
 - 遵守 robots.txt 与站点条款
 - 同一域名请求间隔至少 1 秒, 并发不超过 3
