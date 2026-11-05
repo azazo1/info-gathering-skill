@@ -57,8 +57,10 @@ description: 通用网络调研与信息收集技能. 当用户要求调研, 收
 
 ### 3. 检索规划
 
-先看 `references/channels.md` 选获取通道, 再按 `references/source-matrix.md` 给每个子问题分配来源和查询式, 写进 `plan.md`. 原则:
+先确定领域信源池: 主题属于已整理的领域时, 直接从对应文件取信源 (AI / 科技 / 模型 / 本地推理: `references/ai-tech-sources.md`). 没有整理过的领域, 再按 `references/source-matrix.md` 找站点类型. 获取通道看 `references/channels.md`. 每个子问题分配来源和查询式, 写进 `plan.md`. 原则:
 
+- 时效性主题先查聚合源拿事件清单, 再回到一手来源核实, 聚合源本身不作引用
+- 垂直领域必须查该领域的社区与 changelog, 综合日报会漏
 - 先一手与官方, 再权威二手, 最后社区讨论
 - 每个子问题至少两个独立来源
 - 查询式区分中英文, 关键词和站点限定两种写法
@@ -91,6 +93,10 @@ description: 通用网络调研与信息收集技能. 当用户要求调研, 收
 - 每条事实挂 `[S1]` 形式的来源编号, 编号对应 sources 文件
 - 无证据的推断单独标注为推断, 并说明依据
 
+## 持续监测模式
+
+user 要长期跟踪一个领域 (每日 / 每周追新动态) 时, 不走七阶段, 改走 `references/monitoring-workflow.md`: 订阅池, 定时抓取, 过滤, 历史去重, 分类, 人工筛选, 整理成稿. 定时任务只在 user 明确要求时创建.
+
 ## 质量门槛
 
 交付前逐条自检:
@@ -100,11 +106,15 @@ description: 通用网络调研与信息收集技能. 当用户要求调研, 收
 - [ ] 时效性: 关键来源标了发布时间, 报告标了调研日期
 - [ ] 无编造: 找不到就写未找到可靠来源, 不用常识补
 - [ ] 报告与证据一致, 摘要里的数字和正文对得上
+- [ ] 领域信源池里的聚合源, 一手源, 垂直社区都查过; 没查的写进未覆盖
+- [ ] 厂商自测数字有社区实测佐证, 或明确标注为厂商自测
 
 ## 参考文件
 
 - `references/channels.md`: 获取通道与工具, 内置工具, 命令行, 专用 CLI, 在线服务, API 实测, 降级路径
-- `references/source-matrix.md`: 信息源总目录, 按领域列出可查站点与获取方式
+- `references/ai-tech-sources.md`: AI / 科技信源池, 由橘鸦 AI 早报 90 期 1661 条引用统计而来: 分层用法, 官方域名, X 账号, HF 与 GitHub 组织, 本地推理等垂直信源
+- `references/source-matrix.md`: 信息源总目录, 按领域列出可查站点类型与获取方式
+- `references/monitoring-workflow.md`: 持续监测工作流, 订阅池到成稿的流程与目录约定
 - `references/skill-collection.md`: 收集与评估现成 skill 的渠道, 评估清单, 整合方式与选型记录
 - `references/evidence-spec.md`: 证据目录与元数据格式
 - `references/report-template.md`: 报告骨架与引用规范

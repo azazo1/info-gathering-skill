@@ -23,6 +23,7 @@
 
 ```
 bili search '关键词' --type video --json --max 10    # 综合/视频/专栏/用户/番剧/直播
+bili search 'UP名' --type user --max 10              # 找 UP 主 UID, 再进空间或合集找视频
 bili video BV... --json                              # 详情, 加 -c 看评论, --ai 看 AI 总结
 bili video subtitle BV...                            # 列出并导出字幕
 bili video danmaku BV...                             # 导出弹幕
